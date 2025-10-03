@@ -26,11 +26,8 @@ describe('Singleton Pattern Tests', function() {
 describe('Observer Pattern Tests', function() {
   
   it('should notify observers when event occurs', (done) => {
-    let notified = false;
-
     const testObserver = {
       update: (eventType, data) => {
-        notified = true;
         expect(eventType).to.equal('test_event');
         expect(data).to.have.property('message', 'test');
         done();
@@ -48,7 +45,7 @@ describe('Decorator Pattern Tests', function() {
     const mockPost = {
       _doc: {
         title: 'Test Post',
-        content: 'Content',
+        content: 'Test content',
         views: 0,
         likes: 5
       }
@@ -88,7 +85,7 @@ describe('Decorator Pattern Tests', function() {
     const mockPost = {
       _doc: {
         title: 'Chain Test',
-        content: 'Content',
+        content: 'Content for testing',
         views: 0,
         likes: 10
       }
@@ -115,6 +112,7 @@ describe('Adapter Pattern Tests', function() {
     expect(result).to.have.property('success', true);
     expect(result).to.have.property('provider', 'Stripe');
     expect(result).to.have.property('amount', 100);
+    expect(result).to.have.property('transactionId');
   });
 
   it('should process payment through PayPal adapter', async () => {
@@ -124,6 +122,7 @@ describe('Adapter Pattern Tests', function() {
     expect(result).to.have.property('success', true);
     expect(result).to.have.property('provider', 'PayPal');
     expect(result).to.have.property('amount', 200);
+    expect(result).to.have.property('transactionId');
   });
 
   it('should have uniform interface for different adapters', async () => {

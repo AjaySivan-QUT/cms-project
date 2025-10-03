@@ -49,9 +49,13 @@ class SEODecorator {
     return details;
   }
 
-  generateMetaDescription(content) {
-    return content.substring(0, 160) + '...';
+ generateMetaDescription(content) {
+  if (!content || typeof content !== 'string') {
+    return 'No description available';
   }
+  const length = Math.min(content.length, 160);
+  return content.substring(0, length) + (content.length > 160 ? '...' : '');
+}
 
   extractKeywords(title, content) {
     const text = (title + ' ' + content).toLowerCase();
@@ -59,9 +63,12 @@ class SEODecorator {
     return [...new Set(words.filter(word => word.length > 4))].slice(0, 5);
   }
 
-  generateSlug(title) {
-    return title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+ generateSlug(title) {
+  if (!title || typeof title !== 'string') {
+    return 'untitled-post';
   }
+  return title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+}
 }
 
 module.exports = { BasePost, ViewCountDecorator, SEODecorator };

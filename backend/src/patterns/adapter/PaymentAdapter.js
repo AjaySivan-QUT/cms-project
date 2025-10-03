@@ -1,49 +1,25 @@
-// External Payment Services
-class StripePayment {
-  processStripePayment(amount, currency) {
-    return { success: true, provider: 'Stripe', amount, currency };
-  }
-}
-
-class PayPalPayment {
-  makePayPalPayment(price, currencyCode) {
-    return { status: 'completed', service: 'PayPal', price, currencyCode };
-  }
-}
-
-// Target Interface
-class PaymentProcessor {
-  pay(amount, currency) {
-    throw new Error('Method must be implemented');
-  }
-}
-
-// Adapter for Stripe
-class StripeAdapter extends PaymentProcessor {
-  constructor() {
-    super();
-    this.stripe = new StripePayment();
-  }
-
-  pay(amount, currency) {
-    return this.stripe.processStripePayment(amount, currency);
-  }
-}
-
-// Adapter for PayPal
-class PayPalAdapter extends PaymentProcessor {
-  constructor() {
-    super();
-    this.paypal = new PayPalPayment();
-  }
-
-  pay(amount, currency) {
-    const result = this.paypal.makePayPalPayment(amount, currency);
+class StripeAdapter {
+  async pay(amount, currency) {
+    console.log(`Processing $${amount} ${currency} via Stripe...`);
     return {
-      success: result.status === 'completed',
-      provider: result.service,
-      amount: result.price,
-      currency: result.currencyCode
+      success: true,
+      provider: 'Stripe',
+      amount: amount,
+      currency: currency,
+      transactionId: `stripe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    };
+  }
+}
+
+class PayPalAdapter {
+  async pay(amount, currency) {
+    console.log(`Processing $${amount} ${currency} via PayPal...`);
+    return {
+      success: true,
+      provider: 'PayPal',
+      amount: amount,
+      currency: currency,
+      transactionId: `paypal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     };
   }
 }
